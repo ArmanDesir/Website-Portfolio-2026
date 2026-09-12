@@ -24,6 +24,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
 
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('theme');
+                document.documentElement.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -48,11 +59,31 @@
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;600;650;700&family=Manrope:wght@400;500;600;650;700;800&display=swap');
 
         :root {
+            --ink: #eef2f1;
+            --paper: #0f171d;
+            --muted: #93a1a6;
+            --line: #263038;
+            --surface: #17222a;
+            --accent: #d7fb78;
+            --btn-bg: var(--accent);
+            --btn-text: #101b22;
+            --btn-hover: #c3ef5e;
+            --card-border: #2b3841;
+            --contact-bg: #101b22;
+            color-scheme: dark
+        }
+
+        [data-theme="light"] {
             --ink: #101b22;
             --paper: #f5f7f7;
             --muted: #657078;
             --line: #d8dedf;
-            --accent: #d7fb78
+            --surface: #eaf0f0;
+            --btn-bg: #101b22;
+            --btn-text: #ffffff;
+            --btn-hover: #29414d;
+            --card-border: #d3dcdc;
+            color-scheme: light
         }
 
         * {
@@ -70,7 +101,8 @@
             color: var(--ink);
             font-family: 'DM Sans', Arial, sans-serif;
             font-size: 16px;
-            line-height: 1.6
+            line-height: 1.6;
+            transition: background .2s, color .2s
         }
 
         a {
@@ -154,6 +186,35 @@
             margin-left: 12px
         }
 
+        .theme-toggle {
+            display: grid;
+            place-items: center;
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--ink);
+            font-size: 16px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+            transition: background .2s, border-color .2s, transform .2s
+        }
+
+        .theme-toggle:hover {
+            background: var(--surface);
+            transform: translateY(-1px)
+        }
+
+        @media(max-width:700px) {
+            .theme-toggle {
+                width: 34px;
+                height: 34px;
+                font-size: 14px
+            }
+        }
+
         .eyebrow {
             font-size: 12px;
             letter-spacing: 1.5px;
@@ -210,7 +271,7 @@
         .hero-bottom>p {
             max-width: 470px;
             font-size: 18px;
-            color: #526068
+            color: var(--muted)
         }
 
         .hero-actions {
@@ -224,17 +285,17 @@
             display: inline-flex;
             align-items: center;
             gap: 28px;
-            background: var(--ink);
-            color: white;
+            background: var(--btn-bg);
+            color: var(--btn-text);
             border-radius: 40px;
             padding: 16px 23px;
             font-size: 14px;
             font-weight: 600;
-            transition: transform .2s, background .2s
+            transition: transform .2s, background .2s, color .2s
         }
 
         .button:hover {
-            background: #29414d;
+            background: var(--btn-hover);
             transform: translateY(-2px)
         }
 
@@ -257,8 +318,9 @@
         }
 
         .work-section {
-            background: #eaf0f0;
-            padding: 84px 0 68px
+            background: var(--surface);
+            padding: 84px 0 68px;
+            transition: background .2s
         }
 
         .section-head {
@@ -287,7 +349,7 @@
             display: grid;
             grid-template-columns: 1.15fr 1fr;
             min-height: 420px;
-            border: 1px solid #d3dcdc;
+            border: 1px solid var(--card-border);
             background: var(--paper);
             border-radius: 8px;
             overflow: hidden
@@ -373,7 +435,7 @@
         .project-detail p,
         .project-card p {
             font-size: 15px;
-            color: #54636a
+            color: var(--muted)
         }
 
         .case-list {
@@ -386,7 +448,7 @@
 
         .case-list li {
             font-size: 15px;
-            color: #54636a;
+            color: var(--muted);
             line-height: 1.55;
             padding-left: 18px;
             border-left: 2px solid var(--line)
@@ -409,7 +471,7 @@
 
         .detail-list li {
             font-size: 14px;
-            color: #5c6970;
+            color: var(--muted);
             line-height: 1.55;
             padding-left: 16px;
             position: relative
@@ -450,19 +512,19 @@
         }
 
         .project-card {
-            background: #f5f7f7;
+            background: var(--paper);
             padding: 26px;
-            border: 1px solid #d3dcdc;
+            border: 1px solid var(--card-border);
             border-radius: 8px;
             display: flex;
             flex-direction: column;
-            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease
+            transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, background .2s
         }
 
         .project-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 14px 30px -16px rgba(16, 27, 34, .25);
-            border-color: #b7c6c6
+            border-color: var(--muted)
         }
 
         .card-top {
@@ -508,7 +570,7 @@
         }
 
         .about-copy>p {
-            color: #5c6970
+            color: var(--muted)
         }
 
         .about-copy .large {
@@ -539,7 +601,7 @@
             font-size: 14px;
             line-height: 1.7;
             margin: 0;
-            color: #5c6970
+            color: var(--muted)
         }
 
         .experience {
@@ -588,7 +650,7 @@
 
         .timeline p {
             font-size: 15px;
-            color: #5c6970;
+            color: var(--muted);
             margin: 0;
             max-width: 620px
         }
@@ -619,7 +681,7 @@
         }
 
         .contact {
-            background: var(--ink);
+            background: var(--contact-bg);
             color: #f5f7f7;
             padding: 73px 0 25px
         }
@@ -976,7 +1038,9 @@
             <a href="#work" data-nav="work">Work</a>
             <a href="#about" data-nav="about">About</a>
             <a href="#experience" data-nav="experience">Experience</a>
-            <a class="nav-contact" href="mailto:froschcrow@gmail.com">Let’s talk <span aria-hidden="true">↗</span></a>
+            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode"
+                aria-pressed="false">☀</button>
+            <a class="nav-contact" href="mailto:froschcrow@gmail.com">Let's talk <span aria-hidden="true">↗</span></a>
         </nav>
     </header>
 
@@ -999,7 +1063,7 @@
             <div class="contact" id="contact">
                 <div class="wrap">
                     <p class="eyebrow">HAVE A PROJECT OR AN OPPORTUNITY?</p>
-                    <h2>Let’s build<br><em>something useful.</em></h2><a class="email"
+                    <h2>Let's build<br><em>something useful.</em></h2><a class="email"
                         href="mailto:froschcrow@gmail.com">froschcrow@gmail.com <span aria-hidden="true">↗</span></a>
                     <div class="contact-bottom">
                         <p>Zamboanga City, Philippines</p>
@@ -1154,7 +1218,7 @@
                 <div class="about-copy">
                     <p class="large">Good websites need more than a working interface. They need to be useful,
                         discoverable, and easy to maintain.</p>
-                    <p>I’m Jerico, an IT graduate and web developer in Zamboanga City. My experience spans WordPress
+                    <p>I'm Jerico, an IT graduate and web developer in Zamboanga City. My experience spans WordPress
                         websites, React applications, search optimization, and content workflows — including work
                         that helped take Discover Zamboanga to the No. 1 search ranking in its category. I enjoy
                         connecting the technical details to what a business actually needs.</p>
@@ -1331,6 +1395,29 @@
             });
 
             showPage(currentPageFromHash());
+        })();
+
+        (function () {
+            var root = document.documentElement;
+            var toggle = document.getElementById('theme-toggle');
+            if (!toggle) return;
+
+            function syncButton(theme) {
+                var isDark = theme !== 'light';
+                toggle.textContent = isDark ? '☀' : '🌙';
+                toggle.setAttribute('aria-pressed', String(!isDark));
+                toggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+            }
+
+            syncButton(root.getAttribute('data-theme'));
+
+            toggle.addEventListener('click', function () {
+                var current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                var next = current === 'dark' ? 'light' : 'dark';
+                root.setAttribute('data-theme', next);
+                try { localStorage.setItem('theme', next); } catch (e) { }
+                syncButton(next);
+            });
         })();
     </script>
 </body>
